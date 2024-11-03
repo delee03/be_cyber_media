@@ -43,7 +43,27 @@ const videoController = {
     videoType: async (req, res, next) => {
         try {
             const result = await videoService.videoType();
-            res.json(result);
+            const resData = responseSuccess(
+                result,
+                "Trả dữ liệu thành công",
+                200
+            );
+            res.status(resData.code).json(resData);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    getVideoById: async (req, res, next) => {
+        try {
+            const id = req.params.id;
+            const result = await videoService.getVideoById(id);
+            const resData = responseSuccess(
+                result,
+                "Trả dữ liệu thành công",
+                200
+            );
+            res.status(resData.code).json(resData);
         } catch (error) {
             next(error);
         }
