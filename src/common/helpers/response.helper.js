@@ -7,7 +7,7 @@ export const responseSuccess = (
         status: `success`,
         code: code,
         message: message,
-        content: contentData,
+        metaData: contentData,
         doc: `api.example.com`,
     };
 };

@@ -21,3 +21,19 @@ export class UnauthorizedError extends Error {
         this.statusCode = 401;
     }
 }
+
+export class NotFoundError extends Error {
+    constructor(message = "Not Found") {
+        super(message);
+        this.name = "NotFoundError";
+        this.code = 404;
+    }
+}
+
+export class InternalServerError extends Error {
+    constructor(message = "Internal Server Error") {
+        super(message);
+        this.name = "InternalServerError";
+        this.code = 500;
+    }
+}

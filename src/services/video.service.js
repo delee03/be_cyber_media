@@ -36,7 +36,7 @@ const videoService = {
             pageSize,
             totalPages: totalPages,
             totalItems: totalItems || [],
-            content: videos,
+            items: videos,
         };
     },
 
