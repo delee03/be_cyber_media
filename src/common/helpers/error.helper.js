@@ -15,7 +15,7 @@ export class BadRequestError extends Error {
 }
 
 export class UnauthorizedError extends Error {
-    constructor(message123 = "Unauthorized") {
+    constructor(message = "Unauthorized") {
         super(message);
         this.name = "UnauthorizedError";
         this.statusCode = 401;

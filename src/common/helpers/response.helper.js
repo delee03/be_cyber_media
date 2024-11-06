@@ -21,7 +21,7 @@ export const responseError = (
         status: `error`,
         code: code,
         message: message,
-        stack: stack,
+        stack: null,
         doc: `api.example.com`,
     };
 };

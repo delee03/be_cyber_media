@@ -23,7 +23,7 @@ const videoService = {
 
         const videos = await prisma.videos.findMany({
             take: pageSize,
-            skip: skip,
+            skip: skip, //tính ra được index bắt đầu lấy cho pageIndex
             orderBy: {
                 created_at: "desc",
             },
