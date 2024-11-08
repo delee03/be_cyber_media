@@ -5,6 +5,7 @@ import {
 import prisma from "../common/prisma/init.prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import tokenService from "./token.service.js";
 
 const authService = {
     register: async (req) => {
@@ -69,13 +70,13 @@ const authService = {
         } //có thể trả về cho phép truy cập rồi tuy nhiên cần token và refresh token
 
         //B4: trả về token khi login thành công. (access token và refresh token)
-        const accessToken = jwt.sign(
-            { user_id: userExist.user_id },
-            "KHOABIMAT_ACCESSTOKEN",
-            {
-                expiresIn: "5m",
-            }
-        );
+        // const accessToken = jwt.sign(
+        //     { user_id: userExist.user_id },
+        //     "KHOABIMAT_ACCESSTOKEN",
+        //     {
+        //         expiresIn: "5m",
+        //     }
+        // );
 
         //accessToken : có nhiệm vụ xác minh rằng người dùng login thành công vào hệ thống
 
@@ -85,18 +86,16 @@ const authService = {
         //- hết hạn trả về 403
         // - không hợp lệ sai khóa bí mật : 401: logout người dùng
 
-        const refreshToken = jwt.sign(
-            { user_id: userExist.user_id },
-            "KHOABIMAT_REFRESHTOKEN",
-            {
-                expiresIn: "7d",
-            }
-        );
+        // const refreshToken = jwt.sign(
+        //     { user_id: userExist.user_id },
+        //     "KHOABIMAT_REFRESHTOKEN",
+        //     {
+        //         expiresIn: "7d",
+        //     }
+        // );
+        const tokens = tokenService.createTokens(userExist);
 
-        return {
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-        };
+        return tokens;
     },
     //sau khi tạo ứng dụng thành công ở dashboard => chọn trường hợp sử dụng => tùy chỉnh =>
     //click thêm email => lấy app ID
@@ -115,9 +114,26 @@ const authService = {
             select: {
                 user_id: true,
                 pass_word: true,
+                full_name: true,
+                avatar: true,
+                face_app_id: true,
             },
         });
         if (userExist) {
+            // sẽ update thông tin mới nhất từ facebook nếu có full_name, avatar, face_app_id chưa có
+            await prisma.users.update({
+                where: {
+                    user_id: userExist.user_id,
+                },
+                data: {
+                    full_name: userExist.full_name ? undefined : name,
+                    avatar: userExist.avatar ? undefined : picture.data.url,
+                    face_app_id: userExist.face_app_id ? undefined : id,
+                },
+            });
+            const tokens = tokenService.createTokens(userExist);
+
+            return tokens;
         } else {
             //chưa tồn tại tạo mới
             const newUser = await prisma.users.create({
@@ -128,25 +144,36 @@ const authService = {
                     full_name: name,
                 },
             });
-            const accessToken = jwt.sign(
-                { user_id: newUser.face_app_id },
-                "KHOABIMAT_ACCESSTOKEN",
-                {
-                    expiresIn: "5m",
-                }
-            );
-            const refreshToken = jwt.sign(
-                { user_id: newUser.face_app_id },
-                "KHOABIMAT_REFRESHTOKEN",
-                {
-                    expiresIn: "7d",
-                }
-            );
-            return {
-                accessToken,
-                refreshToken,
-            };
+            // const accessToken = jwt.sign(
+            //     { user_id: newUser.user_id },
+            //     "KHOABIMAT_ACCESSTOKEN",
+            //     {
+            //         expiresIn: "5m",
+            //     }
+            // );
+            // const refreshToken = jwt.sign(
+            //     { user_id: newUser.user_id },
+            //     "KHOABIMAT_REFRESHTOKEN",
+            //     {
+            //         expiresIn: "7d",
+            //     }
+            // );
+            // return {
+            //     accessToken,
+            //     refreshToken,
+            // };
+            const tokens = tokenService.createTokens(newUser);
+
+            return tokens;
         }
+    },
+
+    refreshToken: async (req) => {
+        console.log({ headers: req.headers });
+        const refreshToken = req.headers?.authorization?.split(" ")[1];
+        const accessToken = req.headers[`x-access-token`];
+        console.log({ refreshToken, accessToken });
+        return "refreshToken";
     },
 };
 

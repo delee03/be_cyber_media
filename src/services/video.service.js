@@ -5,16 +5,16 @@ import prisma from "../common/prisma/init.prisma.js";
 
 const videoService = {
     listVideo: async (req) => {
-        let { pageIndex, pageSize } = req.query;
-        console.log(pageIndex, pageSize);
+        let { page, pageSize } = req.query;
+        console.log(page, pageSize);
 
         // pageIndex = +pageIndex;
         // pageSize = +pageSize;
 
-        pageIndex = Number(pageIndex) > 0 ? Number(pageIndex) : 1;
+        page = Number(page) > 0 ? Number(page) : 1;
         pageSize = Number(pageSize) > 0 ? Number(pageSize) : 3;
 
-        const skip = (pageIndex - 1) * pageSize;
+        const skip = (page - 1) * pageSize;
 
         console.log(req.query, skip);
 
@@ -32,7 +32,7 @@ const videoService = {
         // console.log(result);
 
         return {
-            pageIndex,
+            page,
             pageSize,
             totalPages: totalPages,
             totalItems: totalItems || [],
@@ -43,7 +43,7 @@ const videoService = {
     videoType: async () => {
         // const result = await videoTypeModel.findAll();
 
-        const videoTypes = await prisma.video_type.findUnique();
+        const videoTypes = await prisma.video_type.findMany();
 
         return videoTypes;
     },
