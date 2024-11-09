@@ -6,6 +6,10 @@ import prisma from "../common/prisma/init.prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import tokenService from "./token.service.js";
+import {
+    ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET,
+} from "../common/constant/config.contant.js";
 
 const authService = {
     register: async (req) => {
@@ -173,7 +177,32 @@ const authService = {
         const refreshToken = req.headers?.authorization?.split(" ")[1];
         const accessToken = req.headers[`x-access-token`];
         console.log({ refreshToken, accessToken });
-        return "refreshToken";
+
+        if (!refreshToken && !accessToken) {
+            throw new UnauthorizedError();
+        }
+
+        const verifyRefreshToken = jwt.verify(
+            refreshToken,
+            REFRESH_TOKEN_SECRET
+        );
+        const verifyAccessToken = jwt.verify(accessToken, ACCESS_TOKEN_SECRET, {
+            ignoreExpiration: true,
+        });
+
+        if (verifyAccessToken.user_id !== verifyRefreshToken.user_id) {
+            throw new UnauthorizedError();
+        }
+
+        const user = await prisma.users.findUnique({
+            where: {
+                user_id: verifyRefreshToken.user_id,
+            },
+        });
+
+        const tokens = tokenService.createTokens(user);
+
+        return tokens;
     },
 };
 
