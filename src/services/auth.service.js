@@ -10,6 +10,8 @@ import {
     ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN_SECRET,
 } from "../common/constant/config.contant.js";
+import { sendMail } from "../common/nodemailer/send-mail.nodemailer.js";
+import { getInfo } from "prisma";
 
 const authService = {
     register: async (req) => {
@@ -40,6 +42,10 @@ const authService = {
                 full_name: fullName,
             },
         });
+
+        // gửi mail thông báo đăng kí thành công
+        // sendMail();
+        sendMail(email);
         return newUser;
     },
     login: async (req) => {
@@ -203,6 +209,16 @@ const authService = {
         const tokens = tokenService.createTokens(user);
 
         return tokens;
+    },
+    getInfo: async (req) => {
+        // const user = await prisma.users.findUnique({
+        //     where: {
+        //         user_id: +req.params.id,
+        //     },
+        // });
+        const user = req.user;
+        console.log(user);
+        return user;
     },
 };
 
