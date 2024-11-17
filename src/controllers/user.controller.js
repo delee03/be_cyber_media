@@ -66,4 +66,28 @@ export const userController = {
             next(err);
         }
     },
+    uploadAvatar: async function (req, res, next) {
+        try {
+            const result = await userService.uploadAvatar(req);
+            const response = responseSuccess(
+                result,
+                `Upload avatar user  successfully`
+            );
+            res.status(response.code).json(response);
+        } catch (err) {
+            next(err);
+        }
+    },
+    // uploadAvatarCloud: async function (req, res, next) {
+    //     try {
+    //         const result = await userService.uploadAvatar(req);
+    //         const response = responseSuccess(
+    //             result,
+    //             `Upload avatar cloudiary user  successfully`
+    //         );
+    //         res.status(response.code).json(response);
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // },
 };

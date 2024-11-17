@@ -1,3 +1,4 @@
+import { BadRequestError } from "../common/helpers/error.helper.js";
 import prisma from "../common/prisma/init.prisma.js";
 
 export const userService = {
@@ -51,5 +52,50 @@ export const userService = {
 
     remove: async function (req) {
         return `This action removes a user with id: ${req.params.id}`;
+    },
+    // uploadAvatarLocal: async (req) => {
+    //     console.log(req.file);
+    //     return "Upload avatar local thành công";
+    // },
+    uploadAvatar: async (req) => {
+        const file = req.file;
+        if (!file) throw new BadRequestError(`Không có file trong req`);
+
+        // phân biệt có phải local hay không
+        const isImgLocal = req.user.avatar?.includes(`local`);
+
+        if (isImgLocal) {
+            await prisma.users.update({
+                where: {
+                    user_id: +req.user.user_id,
+                },
+                data: {
+                    avatar: file.filename,
+                },
+            });
+            return {
+                folder: `images/`,
+                filename: file.filename,
+                imgUrl: `images${file.path}`,
+            };
+        }
+        await prisma.users.update({
+            where: {
+                user_id: +req.user.user_id,
+            },
+            data: {
+                avatar: file.path,
+            },
+        });
+
+        return {
+            folder: `images/`,
+            filename: file.filename,
+            imgUrl: file.path,
+        };
+    },
+    uploadAvatarCloud: async (req) => {
+        console.log(req.file);
+        return "Upload avatar cloud thành công";
     },
 };

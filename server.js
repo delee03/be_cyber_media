@@ -8,6 +8,10 @@ import { responseError } from "./src/common/helpers/response.helper.js";
 import { handlerError } from "./src/common/helpers/error.helper.js";
 import { Server } from "socket.io";
 import initSocket from "./src/common/socket.io/init.socket.js";
+import schema from "./src/common/graphql/schema.graphql.js";
+import root from "./src/common/graphql/root.graphql.js";
+import { createHandler } from "graphql-http/lib/use/express";
+import { ruruHTML } from "ruru/server";
 
 const app = express();
 
@@ -18,6 +22,23 @@ const server = createServer(app);
 app.use(cors()); // for parsing application/x-www-form-urlencoded is middleware
 
 app.use(express.json()); // for parsing application/json is middleware
+
+app.use(express.static("."));
+
+// Serve the GraphiQL IDE.
+app.get("/ruru", (req, res) => {
+    res.type("html");
+    res.end(ruruHTML({ endpoint: "/graphql" }));
+});
+
+// Create and use the GraphQL handler.
+app.all(
+    "/graphql",
+    createHandler({
+        schema: schema,
+        rootValue: root,
+    })
+);
 
 app.use(rootRouter);
 
