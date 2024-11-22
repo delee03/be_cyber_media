@@ -19,6 +19,7 @@ describe(`Register`, () => {
 
     afterEach(() => {
         console.log("Chạy sau hàm IT");
+        jest.restoreAllMocks();
     });
     describe("authService.register", () => {
         //truyền trong it là test case name và fn

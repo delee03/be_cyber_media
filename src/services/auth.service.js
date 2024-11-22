@@ -16,10 +16,10 @@ import { getInfo } from "prisma";
 const authService = {
     register: async (req) => {
         //b1: nhận dữ liệu từ client FE gửi lên
-        const { email, password, fullName } = req.body;
+        const { email, pass_word, full_name } = req.body;
         console.log(req.body);
         //b2: kiểm tra dữ liệu từ client FE gửi lên có hợp lệ không
-        if (!email || !password || !fullName) {
+        if (!email || !pass_word || !full_name) {
             throw new BadRequestError("Email, password, fullName is invalid");
         }
         //b3: kiểm tra email đã tồn tại trong db chưa
@@ -34,12 +34,12 @@ const authService = {
         }
         console.log(req.body);
         //b4:  mã hóa password 1 chiều trước khi lưu vào db, tạo user trong db
-        const hashPassword = bcrypt.hashSync(password, 10);
+        const hashPassword = bcrypt.hashSync(pass_word, 10);
         const newUser = await prisma.users.create({
             data: {
                 email: email,
                 pass_word: hashPassword,
-                full_name: fullName,
+                full_name: full_name,
             },
         });
 
