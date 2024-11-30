@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+    be-compose:
+        image: cyber_media
+        container_name: be-source-api-compose
+        ports:
+            - "3069:3069"
+        depends_on:
+            - mysql-compose
+        command: ["npm", "run", "start"]
+
+    mysql-compose:
+        image: mysql
+        container_name: some-mysql-compose
+        environment:
+            - MYSQL_ROOT_PASSWORD=123
+        ports:
+            - "3305:3306"
