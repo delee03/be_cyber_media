@@ -18,6 +18,18 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 3c8
 #Lấy danh sách image hiện tại
 docker images
 
+# Gắn thẻ tag cho image để push lên docker hub
+
+docker tag cyber-media fuderrpham/cyber-media:latest
+
+docker tag your-docker-image your-dockerhub-username/your-docker-image:latest
+
+#Push Image to DockerHub
+
+docker push your-dockerhub-username/nestjs-app:latest
+
+docker push fuderrpham/cyber_media:0.0.1
+
 #Tạo docker compose
 * tạo file docker-compose.yml
 * docker compose up -d
