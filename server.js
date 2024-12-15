@@ -14,7 +14,7 @@ import { createHandler } from "graphql-http/lib/use/express";
 import { ruruHTML } from "ruru/server";
 
 const app = express();
-
+console.log("demo CI/CD");
 const server = createServer(app);
 
 // app.use(cors({ origin: ["http://localhost:5173", "http://localhost:3001"] }));
