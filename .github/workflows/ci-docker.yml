@@ -1,5 +1,5 @@
 # Đặt tên
-name: CI docker
+name: CI_docker
 
 # Khi nào chạy
 on:

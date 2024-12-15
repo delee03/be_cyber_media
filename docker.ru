@@ -73,4 +73,27 @@ sudo su
 
 #thoát quyền : exit
 
+#xem log của container
+docker logs container_id 
 
+
+#truy cập vào terminal của container thêm .env
+
+docker exec -it container_id_or_name /bin/sh - ghi file với alpine dùng vi ten_file
+
+tạo file vi .env 
+ touch .env
+ thoát ra : exit
+ I , Esc, :wq, :q
+
+ #restart lại container:
+ docker container restart id_container 
+
+xóa file: sudo rm ten_file
+xóa folder: sudo rmdir ten_folder
+
+
+xóa action runner:
+ sudo rm -rf ~/actions-runner
+
+ sau khi thành công chọn Default

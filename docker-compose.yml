@@ -2,12 +2,20 @@ version: "3"
 
 services:
     be-compose:
-        image: be_cyber_media
+        image: fuderrpham/be_cyber_media:latest
         container_name: be-source-api-compose
         ports:
-            - "3069:3069"
+            - "3070:3069"
         depends_on:
             - mysql-compose
+        environment:
+            - DATABASE_URL=${DATABASE_URL}
+            - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+            - ACCESS_TOKEN_SECRET = ${ACCESS_TOKEN_SECRET}
+            - ACCESS_TOKEN_EXPIRE = ${ACCESS_TOKEN_EXPIRE}
+            - REFRESH_TOKEN_SECRET = ${REFRESH_TOKEN_SECRET}
+            - REFRESH_TOKEN_EXPIRE = ${REFRESH_TOKEN_EXPIRE}
+            - CLOUDIARY_SECRET = ${CLOUDIARY_SECRET}
         command: ["npm", "run", "start"]
 
     mysql-compose:
