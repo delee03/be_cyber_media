@@ -47,3 +47,30 @@ docker push fuderrpham/cyber_media:0.0.1
 * 
 * - xoá container
 * docker container remove id_name_container
+
+
+#Xem ds thư mục
+ls -ls  
+
+#tạo folder 
+mkdir ten_folder         
+
+#di chuyển lùi 
+cd ../
+
+#tạo file
+touch ten_file  
+
+#ghi file bằng tool nano
+nano ten_file
+
+#Lưu file với nano Ctr + O và Enter
+
+Ctr + X = thoát
+
+#kẹp sudo với quyền Root không cần thêm lệnh su trước đó nữa 
+sudo su
+
+#thoát quyền : exit
+
+
