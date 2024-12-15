@@ -2,7 +2,7 @@ version: "3"
 
 services:
     be-compose:
-        image: cyber_media
+        image: fuderrpham/cyber_media:0.0.1
         container_name: be-source-api-compose
         ports:
             - "3069:3069"

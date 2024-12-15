@@ -47,7 +47,6 @@ rootRouter.use("/user", userRouter);
 rootRouter.use("/api-docs", swaggerUi.serve);
 rootRouter.get("/api-docs", (req, res, next) => {
     const urlServer = `${req.protocol}://${req.get("host")}`;
-    // console.log({urlServer});
     swaggerDocument.servers = [
         // ...swaggerDocument.servers,
         {
