@@ -13,10 +13,10 @@ jobs:
         runs-on: node_45
 
         steps:
-            - names: Xóa file .env cũ
+            - name: Xóa file .env cũ
               run: sudo rm -f .env
 
-            - names: Tạo file .env mới
+            - name: Tạo file .env mới
               run: |
                   echo "DATABASE_URL=mysql://root:123@some-mysql-compose:3306/db_media" >> .env
                   echo "JWT_SECRET_KEY=demotokenforauthentication" >> .env
@@ -26,12 +26,12 @@ jobs:
                   echo "REFRESH_TOKEN_EXPIRE=7d" >> .env
                   echo "CLOUDIARY_SECRET=Y4bTq2JKnHagV-lg3-PU5mVt_mc" >> .env
 
-            - names: Dừng và xóa container BE
+            - name: Dừng và xóa container BE
               run: |
                   sudo docker container be-source-api-compose || true
                   sudo docker container remove be-source-api-compose || true
-            - names: XÓa image cũ
+            - name: XÓa image cũ
               run: sudo docker image remove fuderrpham/be_cyber_media:latest
 
-            - names: chạy lại với docker compose
+            - name: chạy lại với docker compose
               run: docker compose up -d
