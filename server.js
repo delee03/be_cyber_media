@@ -31,7 +31,9 @@ app.get("/ruru", (req, res) => {
     res.end(ruruHTML({ endpoint: "/graphql" }));
 });
 
-// Create and use the GraphQL handler.
+// Create and use
+//
+//  the GraphQL handler.
 app.all(
     "/graphql",
     createHandler({
