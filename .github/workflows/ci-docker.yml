@@ -18,7 +18,7 @@ jobs:
               run: docker login -u fuderrpham -p ${{secrets.PASS_DOCKER}}
 
             - name: build image
-              run: docker build . -t fuderrpham/cyber_media:0.0.1
+              run: docker build -t fuderrpham/be_cyber_media:latest .
 
             - name: push image lên docker hub
-              run: docker push fuderrpham/cyber_media:0.0.1
+              run: docker push fuderrpham/be_cyber_media:latest
