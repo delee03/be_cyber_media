@@ -28,10 +28,10 @@ jobs:
 
             - name: Dừng và xóa container BE
               run: |
-                  sudo docker container be-source-api-compose || true
+                  sudo docker container stop be-source-api-compose || true
                   sudo docker container remove be-source-api-compose || true
             - name: XÓa image cũ
-              run: sudo docker image remove fuderrpham/be_cyber_media:latest
+              run: sudo docker image remove fuderrpham/be_cyber_media:latest || true
 
             - name: chạy lại với docker compose
               run: docker compose up -d
