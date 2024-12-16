@@ -1,6 +1,6 @@
 # Chỉ định phiên bản node rút gọn (alpine)
 # Sử dụng node:alpine nhẹ và cài OpenSSL
-FROM node:alpine
+FROM --platform=linux/amd64 node:alpine
 
 # Cài đặt các thư viện cần thiết
 RUN apk add openssl
@@ -20,13 +20,8 @@ COPY . .
 # Chạy Prisma Generate
 RUN npx prisma generate
 
-
-#Mở cổng 3000 
+# Mở cổng 3000 
 EXPOSE 3069
 
 # chạy ứng dụng
 CMD ["npm", "run", "start"]
-
-
-
-

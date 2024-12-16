@@ -110,9 +110,75 @@ xóa action runner:
 
  sau khi thành công chọn Default
 
+
+ # Kiến trúc của server
+ uname -m
+
  # Kiểm tra kiến trúc của Image
 
- docker inspect --format '{{.Os}}/{{.Architecture}}' <image_nameOrId>
+ docker inspect --format '{{.Os}}/{{.Architecture}}' <image_nameOrId>'
 
- *x86 :AMD -chip intel
- *arm: ARM - chip Apple
+#Check đúng OS của Unbuntu
+
+x86: AMD64 (chip intel) --platform=linux/amd64
+arm: ARM64 (chip apple) --platform=linux/arm64
+
+ # Cài đặt NginX
+ sudo apt update
+
+ sudo apt install nginx
+
+ Khi truy cập bất kể trang web nào thì mặc định là cổng 80 http
+ => NGINX sẽ tự động bắt được các access từ port 80 cà chuyển vào port dc qui định
+ trong source code _ex 3070
+
+ # Mở tệp cấu hình
+ sudo nano /etc/nginx/sites-available/default
+
+ * 
+ * ctrl + K để xoá nhanh từng dòng
+ * 
+ *  
+ */
+
+ server {
+     listen 80;
+     server_name 13.212.188.30;  # Subdomain cho API
+     # server_name be-node.fuderrpham.com;
+
+     location / {
+         proxy_pass http://localhost:3070;
+         proxy_http_version 1.1;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection 'upgrade';
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+     }
+
+     location /socket.io/ {
+         proxy_pass http://localhost:3070;
+         proxy_http_version 1.1;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "upgrade";
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_buffering off;
+         proxy_cache off;
+         proxy_read_timeout 86400s;
+         proxy_send_timeout 86400s;
+     }
+ }
+
+/**
+ * - chạy kiểm tra nginx
+ * sudo nginx -t
+ * 
+ * - khởi động lại nginx
+ * sudo systemctl restart nginx
+ * 
+ * mở port 80 trong security của AWS
+ */
