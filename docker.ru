@@ -76,15 +76,27 @@ sudo su
 #xem log của container
 docker logs container_id 
 
+#xem logs của docker compose
+docker compose logs 
+
 
 #truy cập vào terminal của container thêm .env
 
 docker exec -it container_id_or_name /bin/sh - ghi file với alpine dùng vi ten_file
 
-tạo file vi .env 
+#tạo file vi .env 
  touch .env
  thoát ra : exit
  I , Esc, :wq, :q
+
+ #tạo file với nano ten_file 
+ thì dùng Ctrl + O để lưu ....
+
+ #Start container
+ docker start <container_name>
+
+ #Stop container
+ docker stop <container_id_or_name>
 
  #restart lại container:
  docker container restart id_container 
@@ -97,3 +109,10 @@ xóa action runner:
  sudo rm -rf ~/actions-runner
 
  sau khi thành công chọn Default
+
+ # Kiểm tra kiến trúc của Image
+
+ docker inspect --format '{{.Os}}/{{.Architecture}}' <image_nameOrId>
+
+ *x86 :AMD -chip intel
+ *arm: ARM - chip Apple

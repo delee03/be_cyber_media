@@ -1,5 +1,9 @@
 # Chỉ định phiên bản node rút gọn (alpine)
-FROM node:alpine
+# Sử dụng node:alpine nhẹ và cài OpenSSL
+FROM node:18-alpine
+
+# Cài đặt các thư viện cần thiết
+RUN apk add --no-cache openssl1.1 libssl1.1 bash
 
 # thiết lập thư mục làm việc
 WORKDIR /home/app
